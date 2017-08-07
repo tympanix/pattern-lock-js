@@ -11,27 +11,47 @@
             height: 100%;
             background-color: red;
         }
+
         .container {
             max-width: 80vh;
         }
-        svg line {
+
+        svg g.lines line {
             stroke-width: 1.5;
             stroke: black;
+            opacity: 0.5;
         }
-        svg circle.lockdot {
+
+        svg g.lockdots circle {
             r: 2;
             stroke: transparent;
             fill: black;
             stroke-width: 13.5;
         }
-        svg .actives circle {
+
+        svg g.actives circle {
             r: 6;
             fill: white;
             opacity: .5;
+            animation: activatedot .15s 0s ease 1;
+            transform-origin: center;
         }
-        svg .lines line {
+
+        svg g.lines line {
             stroke-width: 1.5;
             stroke-linecap: round;
+        }
+
+        @keyframes activatedot {
+            0% {
+                transform: scale(0);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1.0);
+            }
         }
     </style>
 </head>
