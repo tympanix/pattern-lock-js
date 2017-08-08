@@ -44,7 +44,6 @@
         let actives = svg.find('.actives')
         let code = []
         let track
-        let lastdot
         let currenthandler
 
         svg.on('touchstart mousedown', (e) => {
@@ -64,7 +63,6 @@
         function clear() {
             code = []
             track = undefined
-            lastdot = undefined
             currenthandler = undefined
             lines.empty()
             actives.empty()
@@ -139,7 +137,7 @@
             let target = document.elementFromPoint(x, y);
             let cx = target.getAttribute('cx')
             let cy = target.getAttribute('cy')
-            if (isAvailable(target) && lastdot !== target && !isUsed(target)) {
+            if (isAvailable(target) && !isUsed(target)) {
                 stopTrack(track, target)
                 track = beginTrack(target)
             }
@@ -150,7 +148,7 @@
             if (currenthandler) {
                 svg.off('touchmove mousemove', currenthandler)
             }
-            if (!target) return
+            if (target === undefined) return
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
             track.setAttribute('x2', x)
@@ -158,7 +156,6 @@
         }
 
         function beginTrack(target) {
-            lastdot = target
             code.push(target)
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
