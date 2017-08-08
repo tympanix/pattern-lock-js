@@ -15,7 +15,20 @@
         global.PatternLock = factory(global.jQuery, global);
     }
 }(function ($, window) {
-    var svgns = "http://www.w3.org/2000/svg"
+    var svgns = 'http://www.w3.org/2000/svg'
+    var moveevent = 'touchmove mousemove'
+
+    var scrollKeys = {
+        37: true, // left
+        38: true, // up
+        39: true, // right
+        40: true, // down
+        32: true, // spacebar
+        38: true, // pageup
+        34: true, // pagedown
+        35: true, // end
+        36: true, // home
+    };
 
     function vibrate() {
         navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
@@ -32,16 +45,64 @@
         let code = []
         let track
         let lastdot
+        let currenthandler
 
-        dots.on('touchstart mousedown', (e) => {
+        svg.on('touchstart mousedown', (e) => {
             e.preventDefault()
-            track = beginTrack(e.target)
+            clear()
+            disableScroll()
+            svg.on(moveevent, discoverDot)
             let endEvent = e.type == 'touchstart' ? 'touchend' : 'mouseup';
             $(document).one(endEvent, (e) => {
-                dots.off('mouseenter touchenter')
-                code = []
+                enableScroll()
+                stopTrack(track)
+                track && track.remove()
+                svg.off(moveevent, discoverDot)
             })
         })
+
+        function clear() {
+            code = []
+            track = undefined
+            lastdot = undefined
+            currenthandler = undefined
+            lines.empty()
+            actives.empty()
+        }
+
+        function preventDefault(e) {
+            e = e || window.event;
+            if (e.preventDefault)
+                e.preventDefault();
+            e.returnValue = false;
+        }
+
+        function preventDefaultForScrollKeys(e) {
+            if (scrollKeys[e.keyCode]) {
+                preventDefault(e);
+                return false;
+            }
+        }
+
+        function disableScroll() {
+            console.log("Disable scroll")
+            if (window.addEventListener) // older FF
+                window.addEventListener('DOMMouseScroll', preventDefault, false);
+            window.onwheel = preventDefault; // modern standard
+            window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+            window.ontouchmove = preventDefault; // mobile
+            document.onkeydown = preventDefaultForScrollKeys;
+        }
+
+        function enableScroll() {
+            console.log("Enable scroll")
+            if (window.removeEventListener)
+                window.removeEventListener('DOMMouseScroll', preventDefault, false);
+            window.onmousewheel = document.onmousewheel = null;
+            window.onwheel = null;
+            window.ontouchmove = null;
+            document.onkeydown = null;
+        }
 
         function isUsed(target) {
             for (let i = 0; i < code.length; i++) {
@@ -52,27 +113,44 @@
             return false
         }
 
-        function handle(line) {
+        function isAvailable(target) {
+            for (let i = 0; i < dots.length; i++) {
+                if (dots[i] === target) {
+                    return true
+                }
+            }
+            return false
+        }
+
+        function updateLine(line) {
             return function(e) {
                 e.preventDefault()
+                if (track !== line) return
                 let pos = getMousePos(e)
                 line.setAttribute('x2', pos.x)
                 line.setAttribute('y2', pos.y)
-                let x = e.clientX || e.originalEvent.touches[0].clientX
-                let y = e.clientY || e.originalEvent.touches[0].clientY
-                let target = document.elementFromPoint(x, y);
-                let cx = target.getAttribute('cx')
-                let cy = target.getAttribute('cy')
-                if (target.tagName === 'circle' && lastdot !== target && !isUsed(target)) {
-                    stopTrack(track, target)
-                    track = beginTrack(target)
-                }
                 return false
             }
         }
 
+        function discoverDot(e) {
+            let x = e.clientX || e.originalEvent.touches[0].clientX
+            let y = e.clientY || e.originalEvent.touches[0].clientY
+            let target = document.elementFromPoint(x, y);
+            let cx = target.getAttribute('cx')
+            let cy = target.getAttribute('cy')
+            if (isAvailable(target) && lastdot !== target && !isUsed(target)) {
+                stopTrack(track, target)
+                track = beginTrack(target)
+            }
+        }
+
         function stopTrack(track, target) {
-            svg.off()
+            if (track === undefined) return
+            if (currenthandler) {
+                svg.off('touchmove mousemove', currenthandler)
+            }
+            if (!target) return
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
             track.setAttribute('x2', x)
@@ -87,12 +165,8 @@
             var track = createNewLine(x, y)
             var marker = createNewMarker(x, y)
             actives.append(marker)
-            svg.on('touchmove mousemove', handle(track))
-            $(document).one('mouseup touchend', (e) => {
-                track.remove()
-                marker.remove()
-                svg.off()
-            })
+            currenthandler = updateLine(track)
+            svg.on('touchmove mousemove', currenthandler)
             lines.append(track);
             vibrate()
             return track
@@ -128,6 +202,10 @@
             return {x: newX, y: newY}
         }
     }
+
+    PatternLock.prototype.getPattern = function () {
+
+    };
 
     return PatternLock
 }));
