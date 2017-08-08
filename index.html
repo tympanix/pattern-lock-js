@@ -8,54 +8,12 @@
     html, body {
         min-height: 200vh;
     }
-        #lock {
-            width: 100%;
-            height: 100%;
-            background-color: red;
-        }
 
-        .container {
-            max-width: 80vh;
-        }
-
-        svg g.lines line {
-            stroke-width: 1.5;
-            stroke: black;
-            opacity: 0.5;
-        }
-
-        svg g.lockdots circle {
-            r: 2;
-            stroke: transparent;
-            fill: black;
-            stroke-width: 13.5;
-        }
-
-        svg g.actives circle {
-            r: 6;
-            fill: white;
-            opacity: .5;
-            animation: activatedot .15s 0s ease 1;
-            transform-origin: center;
-        }
-
-        svg g.lines line {
-            stroke-width: 1.5;
-            stroke-linecap: round;
-        }
-
-        @keyframes activatedot {
-            0% {
-                transform: scale(0);
-            }
-            75% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1.0);
-            }
-        }
     </style>
+
+    <!-- build:css styles.css -->
+    <link rel="stylesheet" href="patternlock.css">
+    <!-- endbuild -->
 </head>
 
 <body>
@@ -117,111 +75,14 @@
     <script src="bower_components/jquery/dist/jquery.js" charset="utf-8"></script>
     <!-- endbuild -->
 
+    <!-- build:js patternlock.js -->
+    <script src="patternlock.js" charset="utf-8"></script>
+    <!-- endbuild -->
+
     <script type="text/javascript">
-    (function() {
-        var svgns = "http://www.w3.org/2000/svg"
-
-        let svg = $('svg.patternlock')
-        let dots = svg.find('.lockdots circle')
-        let lines = svg.find('.lines')
-        let actives = svg.find('.actives')
-        let code = []
-        let track
-        let lastdot
-
-        function isUsed(target) {
-            for (let i = 0; i < code.length; i++) {
-                if (code[i] === target) {
-                    return true
-                }
-            }
-            return false
-        }
-
-        function handle(line) {
-            return function(e) {
-                e.preventDefault()
-                let pos = getMousePos(e)
-                line.setAttribute('x2', pos.x)
-                line.setAttribute('y2', pos.y)
-                let x = e.clientX || e.originalEvent.touches[0].clientX
-                let y = e.clientY || e.originalEvent.touches[0].clientY
-                let target = document.elementFromPoint(x, y);
-                let cx = target.getAttribute('cx')
-                let cy = target.getAttribute('cy')
-                if (target.tagName === 'circle' && lastdot !== target && !isUsed(target)) {
-                    stopTrack(track, target)
-                    track = beginTrack(target)
-                    console.log("Bound to target", cx, cy)
-                }
-                return false
-            }
-        }
-
-
-        dots.on('touchstart mousedown', (e) => {
-            e.preventDefault()
-            track = beginTrack(e.target)
-            // dots.on('mouseenter', (e) => {
-            //     e.preventDefault()
-            //     stopTrack(track, e.target)
-            //     track = beginTrack(e.target)
-            // })
-            let endEvent = e.type == 'touchstart' ? 'touchend' : 'mouseup';
-            $(document).one(endEvent, (e) => {
-                dots.off('mouseenter touchenter')
-                code = []
-            })
-        })
-
-        function stopTrack(track, target) {
-            svg.off()
-            let x = target.getAttribute('cx')
-            let y = target.getAttribute('cy')
-            track.setAttribute('x2', x)
-            track.setAttribute('y2', y)
-        }
-
-        function vibrate() {
-            navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-            if (navigator.vibrate) {
-                navigator.vibrate(25)
-            }
-        }
-
-        function beginTrack(target) {
-            lastdot = target
-            code.push(target)
-            let x = target.getAttribute('cx')
-            let y = target.getAttribute('cy')
-            var track = document.createElementNS(svgns, "line")
-            track.setAttribute('x1', x)
-            track.setAttribute('y1', y)
-            track.setAttribute('x2', x)
-            track.setAttribute('y2', y)
-            var activedot = document.createElementNS(svgns, "circle")
-            activedot.setAttribute('cx', x)
-            activedot.setAttribute('cy', y)
-            actives.append(activedot)
-            svg.on('touchmove mousemove', handle(track))
-            $(document).one('mouseup touchend', (e) => {
-                track.remove()
-                activedot.remove()
-                svg.off()
-            })
-            lines.append(track);
-            vibrate()
-            return track
-        }
-
-        function getMousePos(e) {
-            let x = e.pageX || e.originalEvent.touches[0].pageX
-            let y = e.pageY || e.originalEvent.touches[0].pageY
-            let offset = svg.offset()
-            let newX = (x - offset.left) / svg.width() * 100
-            let newY = (y - offset.top) / svg.height() * 100
-            return {x: newX, y: newY}
-        }
+    (function(){
+        var patternlock = new PatternLock('#lock');
+        console.log(patternlock);
     }())
     </script>
 </body>
