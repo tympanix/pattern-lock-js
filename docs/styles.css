@@ -1,13 +1,3 @@
-#lock {
-    width: 100%;
-    height: 100%;
-    background-color: red;
-}
-
-.container {
-    max-width: 80vh;
-}
-
 svg g.lines line {
     stroke-width: 1.5;
     stroke: black;

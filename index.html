@@ -5,21 +5,46 @@
     <meta charset="utf-8">
     <title>Pattern Lock Demo</title>
     <style media="screen">
-    html, body {
-        min-height: 200vh;
-    }
+        html,
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            max-height: 100vh;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Sedgwick Ave', cursive;
+        }
+
+        .container {
+            margin: auto;
+            height: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0;
+            padding: 1em;
+        }
+
+        #lock {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 
     <!-- build:css styles.css -->
     <link rel="stylesheet" href="patternlock.css">
     <!-- endbuild -->
+
+    <link href="https://fonts.googleapis.com/css?family=Sedgwick+Ave" rel="stylesheet">
 </head>
 
 <body>
-    <h1>Pattern Lock</h1>
-
     <div class="container">
+        <h1>Pattern Lock Demo</h1>
         <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <g class="actives"></g>
             <g class="lines"></g>
@@ -38,38 +63,6 @@
             </g>
         <svg>
     </div>
-
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Test</h1>
-    <h1>Ssssssssssssss</h1>
 
     <!-- build:js vendor.js -->
     <script src="bower_components/jquery/dist/jquery.js" charset="utf-8"></script>

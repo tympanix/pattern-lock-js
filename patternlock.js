@@ -39,9 +39,11 @@
 
     function PatternLock(selector, options) {
         let svg = $(selector)
+        let root = svg[0]
         let dots = svg.find('.lockdots circle')
         let lines = svg.find('.lines')
         let actives = svg.find('.actives')
+        var pt = root.createSVGPoint();
         let code = []
         let currentline
         let currenthandler
@@ -122,7 +124,7 @@
             return function(e) {
                 e.preventDefault()
                 if (currentline !== line) return
-                let pos = getMousePos(e)
+                let pos = svgPosition(e.target, e)
                 line.setAttribute('x2', pos.x)
                 line.setAttribute('y2', pos.y)
                 return false
@@ -130,8 +132,7 @@
         }
 
         function discoverDot(e) {
-            let x = e.clientX || e.originalEvent.touches[0].clientX
-            let y = e.clientY || e.originalEvent.touches[0].clientY
+            let {x, y} = getMousePos(e)
             let target = document.elementFromPoint(x, y);
             let cx = target.getAttribute('cx')
             let cy = target.getAttribute('cy')
@@ -189,12 +190,16 @@
         }
 
         function getMousePos(e) {
-            let x = e.clientX || e.originalEvent.touches[0].clientX
-            let y = e.clientY || e.originalEvent.touches[0].clientY
-            let offset = svg.offset()
-            let newX = (x - offset.left) / svg.width() * 100
-            let newY = (y - offset.top) / svg.height() * 100
-            return {x: newX, y: newY}
+            return {
+                x: e.clientX || e.originalEvent.touches[0].clientX,
+                y :e.clientY || e.originalEvent.touches[0].clientY
+            }
+        }
+
+        function svgPosition(element, e) {
+            let {x, y} = getMousePos(e)
+            pt.x = x; pt.y = y;
+            return pt.matrixTransform(element.getScreenCTM().inverse());
         }
     }
 
