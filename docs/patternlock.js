@@ -43,7 +43,7 @@
         let lines = svg.find('.lines')
         let actives = svg.find('.actives')
         let code = []
-        let track
+        let currentline
         let currenthandler
 
         svg.on('touchstart mousedown', (e) => {
@@ -54,15 +54,15 @@
             let endEvent = e.type == 'touchstart' ? 'touchend' : 'mouseup';
             $(document).one(endEvent, (e) => {
                 enableScroll()
-                stopTrack(track)
-                track && track.remove()
+                stopTrack(currentline)
+                currentline && currentline.remove()
                 svg.off(moveevent, discoverDot)
             })
         })
 
         function clear() {
             code = []
-            track = undefined
+            currentline = undefined
             currenthandler = undefined
             lines.empty()
             actives.empty()
@@ -83,7 +83,6 @@
         }
 
         function disableScroll() {
-            console.log("Disable scroll")
             if (window.addEventListener) // older FF
                 window.addEventListener('DOMMouseScroll', preventDefault, false);
             window.onwheel = preventDefault; // modern standard
@@ -93,7 +92,6 @@
         }
 
         function enableScroll() {
-            console.log("Enable scroll")
             if (window.removeEventListener)
                 window.removeEventListener('DOMMouseScroll', preventDefault, false);
             window.onmousewheel = document.onmousewheel = null;
@@ -123,7 +121,7 @@
         function updateLine(line) {
             return function(e) {
                 e.preventDefault()
-                if (track !== line) return
+                if (currentline !== line) return
                 let pos = getMousePos(e)
                 line.setAttribute('x2', pos.x)
                 line.setAttribute('y2', pos.y)
@@ -138,35 +136,35 @@
             let cx = target.getAttribute('cx')
             let cy = target.getAttribute('cy')
             if (isAvailable(target) && !isUsed(target)) {
-                stopTrack(track, target)
-                track = beginTrack(target)
+                stopTrack(currentline, target)
+                currentline = beginTrack(target)
             }
         }
 
-        function stopTrack(track, target) {
-            if (track === undefined) return
+        function stopTrack(line, target) {
+            if (line === undefined) return
             if (currenthandler) {
                 svg.off('touchmove mousemove', currenthandler)
             }
             if (target === undefined) return
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
-            track.setAttribute('x2', x)
-            track.setAttribute('y2', y)
+            line.setAttribute('x2', x)
+            line.setAttribute('y2', y)
         }
 
         function beginTrack(target) {
             code.push(target)
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
-            var track = createNewLine(x, y)
+            var line = createNewLine(x, y)
             var marker = createNewMarker(x, y)
             actives.append(marker)
-            currenthandler = updateLine(track)
+            currenthandler = updateLine(line)
             svg.on('touchmove mousemove', currenthandler)
-            lines.append(track);
+            lines.append(line);
             vibrate()
-            return track
+            return line
         }
 
         function createNewMarker(x, y) {
