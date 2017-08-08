@@ -84,24 +84,39 @@
             code.push(target)
             let x = target.getAttribute('cx')
             let y = target.getAttribute('cy')
-            var track = document.createElementNS(svgns, "line")
-            track.setAttribute('x1', x)
-            track.setAttribute('y1', y)
-            track.setAttribute('x2', x)
-            track.setAttribute('y2', y)
-            var activedot = document.createElementNS(svgns, "circle")
-            activedot.setAttribute('cx', x)
-            activedot.setAttribute('cy', y)
-            actives.append(activedot)
+            var track = createNewLine(x, y)
+            var marker = createNewMarker(x, y)
+            actives.append(marker)
             svg.on('touchmove mousemove', handle(track))
             $(document).one('mouseup touchend', (e) => {
                 track.remove()
-                activedot.remove()
+                marker.remove()
                 svg.off()
             })
             lines.append(track);
             vibrate()
             return track
+        }
+
+        function createNewMarker(x, y) {
+            var marker = document.createElementNS(svgns, "circle")
+            marker.setAttribute('cx', x)
+            marker.setAttribute('cy', y)
+            return marker
+        }
+
+        function createNewLine(x1, y1, x2, y2) {
+            var line = document.createElementNS(svgns, "line")
+            line.setAttribute('x1', x1)
+            line.setAttribute('y1', y1)
+            if (x2 === undefined || y2 == undefined) {
+                line.setAttribute('x2', x1)
+                line.setAttribute('y2', y1)
+            } else {
+                line.setAttribute('x2', x2)
+                line.setAttribute('y2', y2)
+            }
+            return line
         }
 
         function getMousePos(e) {
