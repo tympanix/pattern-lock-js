@@ -16,7 +16,7 @@
     }
 }(function ($, window) {
     var svgns = 'http://www.w3.org/2000/svg'
-    var moveevent = 'touchmove mousemove'
+    var moveEvent = 'touchmove mousemove'
 
     var scrollKeys = {
         37: true, // left
@@ -52,24 +52,47 @@
             clear()
             e.preventDefault()
             disableScroll()
-            svg.on(moveevent, discoverDot)
+            svg.on(moveEvent, discoverDot)
             let endEvent = e.type == 'touchstart' ? 'touchend' : 'mouseup';
             $(document).one(endEvent, (e) => {
                 end()
             })
         })
 
+        // Exported methods
+        Object.assign(this, {
+            clear,
+            success,
+            error,
+            getCode,
+        })
+
+        function success() {
+            svg.removeClass('error')
+            svg.addClass('success')
+        }
+
+        function error() {
+            svg.removeClass('success')
+            svg.addClass('error')
+        }
+
+        function getCode() {
+            return parseInt(code.map((i) => dots.index(i)+1).join(''))
+        }
+
         function end() {
             enableScroll()
             stopTrack(currentline)
             currentline && currentline.remove()
-            svg.off(moveevent, discoverDot)
+            svg.off(moveEvent, discoverDot)
         }
 
         function clear() {
             code = []
             currentline = undefined
             currenthandler = undefined
+            svg.removeClass('success error')
             lines.empty()
             actives.empty()
         }
@@ -210,9 +233,6 @@
         }
     }
 
-    PatternLock.prototype.getPattern = function () {
-
-    };
 
     return PatternLock
 }));
