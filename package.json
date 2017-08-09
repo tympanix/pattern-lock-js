@@ -7,10 +7,7 @@
     "doc": "docs"
   },
   "dependencies": {
-    "browser-sync": "^2.18.13",
-    "gulp": "^3.9.1",
-    "gulp-uglify": "^3.0.0",
-    "gulp-useref": "^3.1.2"
+    "jquery": "^3.2.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
