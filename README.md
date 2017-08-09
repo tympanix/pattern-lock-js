@@ -53,5 +53,3 @@ The returned object from `new PatternLock(...)` has the following utility functi
 The pattern lock constructor accepts a second argument - an object literal with a callback function:
 
 * **`onPattern: function`** Called when a pattern is drawn with the pattern as argument. Returning true/false validates/invalidates the pattern - the same as calling `success()` and `error()`
-```javascript
-
