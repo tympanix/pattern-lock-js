@@ -42,6 +42,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
     function PatternLock(element, options) {
         var svg = $(element);
+        var self = this;
         var root = svg[0];
         var dots = svg.find('.lock-dots circle');
         var lines = svg.find('.lock-lines');
@@ -93,7 +94,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             stopTrack(currentline);
             currentline && currentline.remove();
             svg.off(moveEvent, discoverDot);
-            var val = options.onPattern(getPattern());
+            var val = options.onPattern.call(self, getPattern());
             if (val === true) {
                 success();
             } else if (val === false) {

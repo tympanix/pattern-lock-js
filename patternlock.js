@@ -39,6 +39,7 @@
 
     function PatternLock(element, options) {
         let svg = $(element)
+        let self = this
         let root = svg[0]
         let dots = svg.find('.lock-dots circle')
         let lines = svg.find('.lock-lines')
@@ -88,7 +89,7 @@
             stopTrack(currentline)
             currentline && currentline.remove()
             svg.off(moveEvent, discoverDot)
-            let val = options.onPattern(getPattern())
+            let val = options.onPattern.call(self, getPattern())
             if (val === true) {
                 success()
             } else if (val === false) {
