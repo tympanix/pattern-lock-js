@@ -5,14 +5,12 @@ svg g.lines line {
 }
 
 svg g.lockdots circle {
-    r: 2;
     stroke: transparent;
     fill: black;
     stroke-width: 13.5;
 }
 
 svg g.actives circle {
-    r: 6;
     fill: black;
     opacity: .2;
     animation: activatedot .15s 0s ease 1;

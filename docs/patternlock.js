@@ -49,18 +49,22 @@
         let currenthandler
 
         svg.on('touchstart mousedown', (e) => {
-            e.preventDefault()
             clear()
+            e.preventDefault()
             disableScroll()
             svg.on(moveevent, discoverDot)
             let endEvent = e.type == 'touchstart' ? 'touchend' : 'mouseup';
             $(document).one(endEvent, (e) => {
-                enableScroll()
-                stopTrack(currentline)
-                currentline && currentline.remove()
-                svg.off(moveevent, discoverDot)
+                end()
             })
         })
+
+        function end() {
+            enableScroll()
+            stopTrack(currentline)
+            currentline && currentline.remove()
+            svg.off(moveevent, discoverDot)
+        }
 
         function clear() {
             code = []
@@ -131,9 +135,11 @@
             }
         }
 
-        function discoverDot(e) {
-            let {x, y} = getMousePos(e)
-            let target = document.elementFromPoint(x, y);
+        function discoverDot(e, target) {
+            if (!target) {
+                let {x, y} = getMousePos(e)
+                target = document.elementFromPoint(x, y);
+            }
             let cx = target.getAttribute('cx')
             let cy = target.getAttribute('cy')
             if (isAvailable(target) && !isUsed(target)) {
@@ -172,6 +178,7 @@
             var marker = document.createElementNS(svgns, "circle")
             marker.setAttribute('cx', x)
             marker.setAttribute('cy', y)
+            marker.setAttribute('r', 6)
             return marker
         }
 
