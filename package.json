@@ -2,7 +2,7 @@
   "name": "pattern-lock-js",
   "version": "1.0.0",
   "description": "An android inspired patter lock in pure javascript",
-  "main": "gulpfile.js",
+  "main": "patternlock.js",
   "directories": {
     "doc": "docs"
   },
@@ -13,10 +13,16 @@
     "gulp-useref": "^3.1.2"
   },
   "devDependencies": {
-      "browser-sync": "^2.18.13",
-      "gulp": "^3.9.1",
-      "gulp-uglify": "^3.0.0",
-      "gulp-useref": "^3.1.2"
+    "babel-core": "^6.25.0",
+    "babel-preset-env": "^1.6.0",
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-if": "^2.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
+    "gulp-useref": "^3.1.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
