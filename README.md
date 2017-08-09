@@ -1,5 +1,5 @@
 # pattern-lock-js
-A passcode mechanism built with scalable vector graphics (SVG) and Javascript for modern web application with mobile and tablet support
+A passcode mechanism built with scalable vector graphics (SVG) and javascript for modern web application with mobile and tablet support
 
 ## [Demo](https://tympanix.github.io/pattern-lock-js/)
 
