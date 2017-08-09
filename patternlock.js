@@ -37,8 +37,8 @@
         }
     }
 
-    function PatternLock(selector, options) {
-        let svg = $(selector)
+    function PatternLock(element, options) {
+        let svg = $(element)
         let root = svg[0]
         let dots = svg.find('.lockdots circle')
         let lines = svg.find('.lines')
@@ -47,6 +47,8 @@
         let code = []
         let currentline
         let currenthandler
+
+        options = Object.assign(PatternLock.defaults, options || {})
 
         svg.on('touchstart mousedown', (e) => {
             clear()
@@ -64,7 +66,7 @@
             clear,
             success,
             error,
-            getCode,
+            getPattern,
         })
 
         function success() {
@@ -77,7 +79,7 @@
             svg.addClass('error')
         }
 
-        function getCode() {
+        function getPattern() {
             return parseInt(code.map((i) => dots.index(i)+1).join(''))
         }
 
@@ -86,6 +88,12 @@
             stopTrack(currentline)
             currentline && currentline.remove()
             svg.off(moveEvent, discoverDot)
+            let val = options.onPattern(getPattern())
+            if (val === true) {
+                success()
+            } else if (val === false) {
+                error()
+            }
         }
 
         function clear() {
@@ -231,6 +239,11 @@
             pt.x = x; pt.y = y;
             return pt.matrixTransform(element.getScreenCTM().inverse());
         }
+    }
+
+
+    PatternLock.defaults = {
+        onPattern: () => {},
     }
 
 
