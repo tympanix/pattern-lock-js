@@ -43,9 +43,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     function PatternLock(element, options) {
         var svg = $(element);
         var root = svg[0];
-        var dots = svg.find('.lockdots circle');
-        var lines = svg.find('.lines');
-        var actives = svg.find('.actives');
+        var dots = svg.find('.lock-dots circle');
+        var lines = svg.find('.lock-lines');
+        var actives = svg.find('.lock-actives');
         var pt = root.createSVGPoint();
         var code = [];
         var currentline = void 0;

@@ -17,9 +17,9 @@ Import the module:
 Design your desired svg pattern (or use the default one below). Your svg graphics must as a minimum have the `patternlock` class and three groups `<g>` with the classes `actives`, `lines` and `lockdots`
 ```html
 <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g class="actives"></g>
-    <g class="lines"></g>
-    <g class="lockdots">
+    <g class="lock-actives"></g>
+    <g class="lock-lines"></g>
+    <g class="lock-dots">
         <circle cx="20" cy="20" class="lockdot" r="2"/>
         <circle cx="50" cy="20" class="lockdot" r="2"/>
         <circle cx="80" cy="20" class="lockdot" r="2"/>

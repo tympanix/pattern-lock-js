@@ -40,9 +40,9 @@
     function PatternLock(element, options) {
         let svg = $(element)
         let root = svg[0]
-        let dots = svg.find('.lockdots circle')
-        let lines = svg.find('.lines')
-        let actives = svg.find('.actives')
+        let dots = svg.find('.lock-dots circle')
+        let lines = svg.find('.lock-lines')
+        let actives = svg.find('.lock-actives')
         var pt = root.createSVGPoint();
         let code = []
         let currentline
