@@ -2,13 +2,17 @@
 A passcode mechanism built with scalable vector graphics (SVG) and Javascript for modern web application with mobile and tablet support
 
 ## Getting started
-Import the files:
+Import dependecies:
+```html
+<script src="jquery.js" charset="utf-8"></script>
+```
+Import the module:
 ```html
 <link rel="stylesheet" href="patternlock.min.css">
 <script src="patternlock.min.js" charset="utf-8"></script>
 ```
 
-Design your desired svg pattern (or use the default one below). Your svg gphacis must as a minimum have the `patternlock` class and three groups `<g>` with the classes `actives`, `lines` and `lockdots`
+Design your desired svg pattern (or use the default one below). Your svg graphics must as a minimum have the `patternlock` class and three groups `<g>` with the classes `actives`, `lines` and `lockdots`
 ```html
 <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <g class="actives"></g>
