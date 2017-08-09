@@ -33,5 +33,6 @@
     "web"
   ],
   "author": "tympanix",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": "https://github.com/Tympanix/pattern-lock-js.git"
 }

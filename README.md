@@ -3,6 +3,17 @@ A passcode mechanism built with scalable vector graphics (SVG) and javascript fo
 
 ## [Demo](https://tympanix.github.io/pattern-lock-js/)
 
+## Install
+Install using npm:
+```
+npm i pattern-lock-js --save
+```
+
+... or install using yarn:
+```
+yarn add pattern-lock-js
+```
+
 ## Getting started
 Import dependecies:
 ```html
