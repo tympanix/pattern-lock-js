@@ -14,23 +14,23 @@ Import the module:
 <script src="patternlock.min.js" charset="utf-8"></script>
 ```
 
-Design your desired svg pattern (or use the default one below). Your svg graphics must as a minimum have the `patternlock` class and three groups `<g>` with the classes `actives`, `lines` and `lockdots`
+Design your desired svg pattern (or use the default one below). Your svg graphics must as a minimum have the `patternlock` class and three groups `<g>` with the classes `lock-actives`, `lock-lines` and `lock-dots`
 ```html
 <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
     <g class="lock-actives"></g>
     <g class="lock-lines"></g>
     <g class="lock-dots">
-        <circle cx="20" cy="20" class="lockdot" r="2"/>
-        <circle cx="50" cy="20" class="lockdot" r="2"/>
-        <circle cx="80" cy="20" class="lockdot" r="2"/>
+        <circle cx="20" cy="20" r="2"/>
+        <circle cx="50" cy="20" r="2"/>
+        <circle cx="80" cy="20" r="2"/>
 
-        <circle cx="20" cy="50" class="lockdot" r="2"/>
-        <circle cx="50" cy="50" class="lockdot" r="2"/>
-        <circle cx="80" cy="50" class="lockdot" r="2"/>
+        <circle cx="20" cy="50" r="2"/>
+        <circle cx="50" cy="50" r="2"/>
+        <circle cx="80" cy="50" r="2"/>
 
-        <circle cx="20" cy="80" class="lockdot" r="2"/>
-        <circle cx="50" cy="80" class="lockdot" r="2"/>
-        <circle cx="80" cy="80" class="lockdot" r="2"/>
+        <circle cx="20" cy="80" r="2"/>
+        <circle cx="50" cy="80" r="2"/>
+        <circle cx="80" cy="80" r="2"/>
     </g>
 <svg>
 ```
