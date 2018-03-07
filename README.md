@@ -62,6 +62,7 @@ The returned object from `new PatternLock(...)` has the following utility functi
 * **`error()`** Validates the pattern as incorrect
 * **`getPattern()`** Returnes the currently active pattern or `NaN`
 
-The pattern lock constructor accepts a second argument - an object literal with a callback function:
+The pattern lock constructor accepts a second argument - an object literal with the following properties:
 
 * **`onPattern: function`** Called when a pattern is drawn with the pattern as argument. Returning true/false validates/invalidates the pattern - the same as calling `success()` and `error()`. The context is set to the pattern lock instance itself.
+* **`vibrate: boolean`** Defines if there should be vibrations while using the PatternLock (if available). Default: `true`
