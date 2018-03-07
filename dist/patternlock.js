@@ -208,7 +208,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             currenthandler = updateLine(line);
             svg.on('touchmove mousemove', currenthandler);
             lines.append(line);
-            vibrate();
+            if (options.vibrate) vibrate();
             return line;
         }
 
@@ -252,7 +252,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
 
     PatternLock.defaults = {
-        onPattern: function onPattern() {}
+        onPattern: function onPattern() {},
+        vibrate: true
     };
 
     return PatternLock;
