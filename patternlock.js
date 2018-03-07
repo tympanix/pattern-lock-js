@@ -202,7 +202,7 @@
             currenthandler = updateLine(line)
             svg.on('touchmove mousemove', currenthandler)
             lines.append(line);
-            vibrate()
+            if(options.vibrate) vibrate()
             return line
         }
 
@@ -245,6 +245,7 @@
 
     PatternLock.defaults = {
         onPattern: () => {},
+        vibrate: true,
     }
 
 
