@@ -43,7 +43,7 @@ Design your desired svg pattern (or use the default one below). Your svg graphic
         <circle cx="50" cy="80" r="2"/>
         <circle cx="80" cy="80" r="2"/>
     </g>
-<svg>
+</svg>
 ```
 Initialise the component
 ```javascript
