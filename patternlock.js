@@ -1,5 +1,5 @@
 (function (factory) {
-    var global = Function('return this')() || (0, eval)('this');
+    let global = Function('return this')() || (0, eval)('this');
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define(['jquery'], function($) {
@@ -15,10 +15,9 @@
         global.PatternLock = factory(global.jQuery, global);
     }
 }(function ($, window) {
-    var svgns = 'http://www.w3.org/2000/svg'
-    var moveEvent = 'touchmove mousemove'
-
-    var scrollKeys = {
+    let svgns = 'http://www.w3.org/2000/svg',
+    moveEvent = 'touchmove mousemove',
+    scrollKeys = {
         37: true, // left
         38: true, // up
         39: true, // right
@@ -38,16 +37,22 @@
     }
 
     function PatternLock(element, options) {
-        let svg = $(element)
-        let self = this
-        let root = svg[0]
-        let dots = svg.find('.lock-dots circle')
-        let lines = svg.find('.lock-lines')
-        let actives = svg.find('.lock-actives')
-        var pt = root.createSVGPoint();
-        let code = []
-        let currentline
-        let currenthandler
+        let svg = $(element),
+        self = this,
+        root = svg[0],
+        dots = svg.find('.lock-dots circle'),
+        lines = svg.find('.lock-lines'),
+        actives = svg.find('.lock-actives'),
+        pt = root.createSVGPoint(),
+        code = [],
+        currentline,
+        currenthandler,
+        i,
+        dotsMap = []
+
+        for(i=0; i<dots.length; i++){
+            dotsMap[i+1] = {x: dots[i].cx.baseVal.value, y: dots[i].cy.baseVal.value};
+        }
 
         options = Object.assign(PatternLock.defaults, options || {})
 
@@ -68,6 +73,7 @@
             success,
             error,
             getPattern,
+            setPattern,
         })
 
         function success() {
@@ -82,6 +88,25 @@
 
         function getPattern() {
             return parseInt(code.map((i) => dots.index(i)+1).join(''))
+        }
+
+        function setPattern(arr){
+            clear()
+            if (arr === undefined) return
+            let marker,line, dotActual, dotBefore = null
+            for(i = 0; i < arr.length ; i++ ){
+                if(dotsMap[arr[i]] !== undefined){
+                    dotActual = dotsMap[arr[i]]
+                    marker = createNewMarker(dotActual.x,dotActual.y)
+                    actives.append(marker)
+                    if(dotBefore != null){
+                        line = createNewLine(dotBefore.x, dotBefore.y, dotActual.x, dotActual.y)
+                        lines.append(line)
+                    }
+                    if (options.vibrate) vibrate()
+                    dotBefore = dotActual
+                }
+            }
         }
 
         function end() {
@@ -139,7 +164,7 @@
         }
 
         function isUsed(target) {
-            for (let i = 0; i < code.length; i++) {
+            for (i = 0; i < code.length; i++) {
                 if (code[i] === target) {
                     return true
                 }
@@ -148,7 +173,7 @@
         }
 
         function isAvailable(target) {
-            for (let i = 0; i < dots.length; i++) {
+            for (i = 0; i < dots.length; i++) {
                 if (dots[i] === target) {
                     return true
                 }
@@ -172,8 +197,8 @@
                 let {x, y} = getMousePos(e)
                 target = document.elementFromPoint(x, y);
             }
-            let cx = target.getAttribute('cx')
-            let cy = target.getAttribute('cy')
+            let cx = target.getAttribute('cx'),
+            cy = target.getAttribute('cy')
             if (isAvailable(target) && !isUsed(target)) {
                 stopTrack(currentline, target)
                 currentline = beginTrack(target)
@@ -186,18 +211,18 @@
                 svg.off('touchmove mousemove', currenthandler)
             }
             if (target === undefined) return
-            let x = target.getAttribute('cx')
-            let y = target.getAttribute('cy')
+            let x = target.getAttribute('cx'),
+            y = target.getAttribute('cy')
             line.setAttribute('x2', x)
             line.setAttribute('y2', y)
         }
 
         function beginTrack(target) {
             code.push(target)
-            let x = target.getAttribute('cx')
-            let y = target.getAttribute('cy')
-            var line = createNewLine(x, y)
-            var marker = createNewMarker(x, y)
+            let x = target.getAttribute('cx'),
+            y = target.getAttribute('cy'),
+            line = createNewLine(x, y),
+            marker = createNewMarker(x, y)
             actives.append(marker)
             currenthandler = updateLine(line)
             svg.on('touchmove mousemove', currenthandler)
@@ -207,7 +232,7 @@
         }
 
         function createNewMarker(x, y) {
-            var marker = document.createElementNS(svgns, "circle")
+            let marker = document.createElementNS(svgns, "circle")
             marker.setAttribute('cx', x)
             marker.setAttribute('cy', y)
             marker.setAttribute('r', 6)
@@ -215,7 +240,7 @@
         }
 
         function createNewLine(x1, y1, x2, y2) {
-            var line = document.createElementNS(svgns, "line")
+            let line = document.createElementNS(svgns, "line")
             line.setAttribute('x1', x1)
             line.setAttribute('y1', y1)
             if (x2 === undefined || y2 == undefined) {
@@ -242,12 +267,10 @@
         }
     }
 
-
     PatternLock.defaults = {
         onPattern: () => {},
         vibrate: true,
     }
-
 
     return PatternLock
 }));

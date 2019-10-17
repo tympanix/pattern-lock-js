@@ -61,6 +61,7 @@ The returned object from `new PatternLock(...)` has the following utility functi
 * **`success()`** Validates the pattern as correct
 * **`error()`** Validates the pattern as incorrect
 * **`getPattern()`** Returnes the currently active pattern or `NaN`
+* **`setPattern(array)`** Set a pattern based on a array
 
 The pattern lock constructor accepts a second argument - an object literal with the following properties:
 
