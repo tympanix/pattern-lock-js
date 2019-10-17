@@ -21,12 +21,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         global.PatternLock = factory(global.jQuery, global);
     }
 })(function ($, window) {
-    var _scrollKeys;
-
-    var svgns = 'http://www.w3.org/2000/svg';
-    var moveEvent = 'touchmove mousemove';
-
-    var scrollKeys = (_scrollKeys = {
+    var _scrollKeys,
+    svgns = 'http://www.w3.org/2000/svg',
+    moveEvent = 'touchmove mousemove',
+    scrollKeys = (_scrollKeys = {
         37: true, // left
         38: true, // up
         39: true, // right
@@ -41,16 +39,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
 
     function PatternLock(element, options) {
-        var svg = $(element);
-        var self = this;
-        var root = svg[0];
-        var dots = svg.find('.lock-dots circle');
-        var lines = svg.find('.lock-lines');
-        var actives = svg.find('.lock-actives');
-        var pt = root.createSVGPoint();
-        var code = [];
-        var currentline = void 0;
-        var currenthandler = void 0;
+        var svg = $(element),
+         self = this,
+         root = svg[0],
+         dots = svg.find('.lock-dots circle'),
+         lines = svg.find('.lock-lines'),
+         actives = svg.find('.lock-actives'),
+         pt = root.createSVGPoint(),
+         code = [],
+         dotsMap = [],
+         currentline = void 0,
+         currenthandler = void 0,
+         i = 0;
+
+        for(i=0; i<dots.length; i++){
+            dotsMap[i+1] = {x: dots[i].cx.baseVal.value, y: dots[i].cy.baseVal.value};
+        }
 
         options = Object.assign(PatternLock.defaults, options || {});
 
@@ -70,7 +74,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             clear: clear,
             success: success,
             error: error,
-            getPattern: getPattern
+            getPattern: getPattern,
+            setPattern: setPattern
         });
 
         function success() {
@@ -87,6 +92,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             return parseInt(code.map(function (i) {
                 return dots.index(i) + 1;
             }).join(''));
+        }
+        function setPattern(arr){
+            clear();
+            if (arr === undefined) return;
+            var marker,line, dotActual, dotBefore = null;
+            for(i = 0; i < arr.length ; i++ ){
+                if(dotsMap[arr[i]] !== undefined){
+                    dotActual = dotsMap[arr[i]];
+                    marker = createNewMarker(dotActual.x,dotActual.y);
+                    actives.append(marker);
+                    if(dotBefore != null){
+                        line = createNewLine(dotBefore.x, dotBefore.y, dotActual.x, dotActual.y);
+                        lines.append(line);
+                    }
+                    if (options.vibrate) vibrate();
+                    dotBefore = dotActual;
+                }
+            }
         }
 
         function end() {
@@ -142,7 +165,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         function isUsed(target) {
-            for (var i = 0; i < code.length; i++) {
+            for (i = 0; i < code.length; i++) {
                 if (code[i] === target) {
                     return true;
                 }
@@ -151,7 +174,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }
 
         function isAvailable(target) {
-            for (var i = 0; i < dots.length; i++) {
+            for (i = 0; i < dots.length; i++) {
                 if (dots[i] === target) {
                     return true;
                 }
@@ -178,8 +201,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
                 target = document.elementFromPoint(x, y);
             }
-            var cx = target.getAttribute('cx');
-            var cy = target.getAttribute('cy');
+            var cx = target.getAttribute('cx'),
+             cy = target.getAttribute('cy');
             if (isAvailable(target) && !isUsed(target)) {
                 stopTrack(currentline, target);
                 currentline = beginTrack(target);
@@ -192,18 +215,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 svg.off('touchmove mousemove', currenthandler);
             }
             if (target === undefined) return;
-            var x = target.getAttribute('cx');
-            var y = target.getAttribute('cy');
+            var x = target.getAttribute('cx'),
+            y = target.getAttribute('cy');
             line.setAttribute('x2', x);
             line.setAttribute('y2', y);
         }
 
         function beginTrack(target) {
             code.push(target);
-            var x = target.getAttribute('cx');
-            var y = target.getAttribute('cy');
-            var line = createNewLine(x, y);
-            var marker = createNewMarker(x, y);
+            var x = target.getAttribute('cx'),
+            y = target.getAttribute('cy'),
+            line = createNewLine(x, y),
+            marker = createNewMarker(x, y);
             actives.append(marker);
             currenthandler = updateLine(line);
             svg.on('touchmove mousemove', currenthandler);
@@ -245,7 +268,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var _getMousePos2 = getMousePos(e),
                 x = _getMousePos2.x,
                 y = _getMousePos2.y;
-
             pt.x = x;pt.y = y;
             return pt.matrixTransform(element.getScreenCTM().inverse());
         }
