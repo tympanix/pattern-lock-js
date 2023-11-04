@@ -67,6 +67,7 @@
             clear,
             success,
             error,
+            draw,
             getPattern,
         })
 
@@ -104,6 +105,16 @@
             svg.removeClass('success error')
             lines.empty()
             actives.empty()
+        }
+
+        function draw(pattern) {
+            clear();
+            pattern = pattern.toString();
+            for (let i = 0; i < pattern.length; i++) {
+                let dot = dots[pattern[i] - 1];
+                discoverDot(undefined, dot);
+            }
+            end();
         }
 
         function preventDefault(e) {
