@@ -47,8 +47,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var dots = svg.find('.lock-dots circle');
         var lines = svg.find('.lock-lines');
         var actives = svg.find('.lock-actives');
+        var code_display = svg.find('.code_display');
         var pt = root.createSVGPoint();
         var code = [];
+        var code_numbers = [];
         var currentline = void 0;
         var currenthandler = void 0;
 
@@ -109,6 +111,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             svg.removeClass('success error');
             lines.empty();
             actives.empty();
+            code_display.innerHTML = '';
         }
 
         function preventDefault(e) {
@@ -182,6 +185,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var cy = target.getAttribute('cy');
             if (isAvailable(target) && !isUsed(target)) {
                 stopTrack(currentline, target);
+                updateTextForm(target);
                 currentline = beginTrack(target);
             }
         }
@@ -196,6 +200,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
             var y = target.getAttribute('cy');
             line.setAttribute('x2', x);
             line.setAttribute('y2', y);
+        }
+
+        function updateTextForm(target) {
+            var x = (target.getAttribute('cx') - 20) / 30; // 20 = 0, 50 = 1, 80 = 2
+            var y = (target.getAttribute('cy') - 20) / 30;
+
+            code_numbers.push(1+x+(y * 3)); // 1 = 1 + 0 + 0; 2 = 1 + 1 + 0; 3 = 1 + 2 + 0; 4 = 1 + 0 + 3; 5 = 1 + 1 + 3; 6 = 1 + 2 + 3; 7 = 1 + 0 + 6; 8 = 1 + 1 + 6; 9 = 1 + 2 + 6
+        
+            text.
         }
 
         function beginTrack(target) {
